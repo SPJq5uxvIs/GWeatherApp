@@ -10,9 +10,12 @@ import SwiftData
 
 @main
 struct GWeatherAppApp: App {
+    
+    @StateObject var weatherVM = WeatherViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(weatherVM: weatherVM)
+                .modelContainer(for: WeatherRecord.self)
         }
     }
 }

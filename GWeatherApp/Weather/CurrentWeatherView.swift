@@ -13,7 +13,6 @@ struct CurrentWeatherView: View {
 
     var body: some View {
         ZStack {
-            
             LinearGradient(colors: [.white, .blue],
                            startPoint: .bottom,
                            endPoint: .center)
@@ -28,7 +27,9 @@ struct CurrentWeatherView: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            viewModel.requestWeather()
+            withAnimation {
+                viewModel.requestWeather()
+            }
         }
     }
 

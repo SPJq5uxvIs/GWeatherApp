@@ -6,23 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
+    
+    @ObservedObject var weatherVM: WeatherViewModel
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         TabView {
-            CurrentWeatherView(viewModel: WeatherViewModel())
+            CurrentWeatherView(viewModel: weatherVM)
                 .tabItem {
                     Label("Now", systemImage: "cloud.sun.fill")
                 }
             
-            HistoryListView()
+            HistoryListView(viewModel: HistoryViewModel(modelContext: modelContext))
                 .tabItem {
                     Label("History", systemImage: "clock.arrow.circlepath")
                 }
+        }
+        .onReceive(weatherVM.$lastResponse.compactMap { $0 }) { response in
+            let repo = HistoryRepository(modelContext: modelContext)
+            withAnimation {
+                try? repo.save(from: response)
+            }
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(weatherVM: WeatherViewModel())
 }
