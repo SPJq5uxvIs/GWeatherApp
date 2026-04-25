@@ -8,7 +8,32 @@
 import SwiftUI
 
 struct CurrentWeatherView: View {
+
+    @ObservedObject var viewModel: WeatherViewModel
+
     var body: some View {
+        ZStack {
+            LinearGradient(colors: [.white, .blue],
+                           startPoint: .bottom,
+                           endPoint: .center)
+            
+            if viewModel.isLoading {
+                ProgressView("Fetching weather…")
+            } else if let error = viewModel.errorMessage {
+                errorView(message: error)
+            } else {
+                weatherContent
+            }
+        }
+        .ignoresSafeArea()
+        .onAppear {
+            withAnimation {
+                viewModel.requestWeather()
+            }
+        }
+    }
+
+    private var weatherContent: some View {
         VStack(spacing: 24) {
             locationHeader
             temperatureBlock
@@ -16,12 +41,12 @@ struct CurrentWeatherView: View {
         }
         .padding(24)
     }
-    
+
     private var locationHeader: some View {
         VStack(spacing: 4) {
-            Text("City")
+            Text(viewModel.cityName)
                 .font(.largeTitle.weight(.semibold))
-            Text("Country")
+            Text(viewModel.country)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -29,20 +54,21 @@ struct CurrentWeatherView: View {
 
     private var temperatureBlock: some View {
         VStack(spacing: 12) {
-            Image(systemName: "cloud.fill")
+            Image(systemName: viewModel.weatherIconName)
                 .font(.system(size: 72))
                 .symbolRenderingMode(.multicolor)
-            Text("67 Degrees")
+                .shadow(color: .black, radius: 1, x: 3, y: 3)
+            Text(viewModel.temperatureCelsius)
                 .font(.system(size: 52, weight: .thin, design: .rounded))
         }
     }
 
     private var sunTimesRow: some View {
         HStack(spacing: 40) {
-            sunTimeItem(label: "Sunrise", time: "6:00 AM",
+            sunTimeItem(label: "Sunrise", time: viewModel.sunrise,
                         icon: "sunrise.fill")
             Divider().frame(height: 40)
-            sunTimeItem(label: "Sunset",  time: "7:00 PM",
+            sunTimeItem(label: "Sunset",  time: viewModel.sunset,
                         icon: "sunset.fill")
         }
         .padding(.horizontal, 32)
@@ -62,8 +88,22 @@ struct CurrentWeatherView: View {
                 .foregroundStyle(.secondary)
         }
     }
+
+    private func errorView(message: String) -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.largeTitle)
+                .foregroundStyle(.orange)
+            Text(message)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+            Button("Retry") { viewModel.requestWeather() }
+                .buttonStyle(.borderedProminent)
+        }
+        .padding()
+    }
 }
 
 #Preview {
-    CurrentWeatherView()
+    CurrentWeatherView(viewModel: WeatherViewModel())
 }
