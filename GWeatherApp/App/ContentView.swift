@@ -11,14 +11,25 @@ import Combine
 struct ContentView: View {
     
     @ObservedObject var weatherVM: WeatherViewModel
+    @ObservedObject var authVM: AuthViewModel
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         TabView {
-            CurrentWeatherView(viewModel: weatherVM)
-                .tabItem {
-                    Label("Now", systemImage: "cloud.sun.fill")
-                }
+            NavigationStack {
+                CurrentWeatherView(viewModel: weatherVM)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Sign Out") {
+                                authVM.logout()
+                            }
+                            .foregroundStyle(.red)
+                        }
+                    }
+            }
+            .tabItem {
+                Label("Now", systemImage: "cloud.sun.fill")
+            }
             
             HistoryListView(viewModel: HistoryViewModel(modelContext: modelContext))
                 .tabItem {
@@ -35,5 +46,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(weatherVM: WeatherViewModel())
+    ContentView(weatherVM: WeatherViewModel(), authVM: AuthViewModel())
 }

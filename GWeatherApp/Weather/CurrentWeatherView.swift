@@ -57,6 +57,7 @@ struct CurrentWeatherView: View {
             Image(systemName: viewModel.weatherIconName)
                 .font(.system(size: 72))
                 .symbolRenderingMode(.multicolor)
+                .shadow(color: .black, radius: 1, x: 3, y: 3)
             Text(viewModel.temperatureCelsius)
                 .font(.system(size: 52, weight: .thin, design: .rounded))
         }

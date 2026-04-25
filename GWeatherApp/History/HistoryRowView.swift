@@ -22,6 +22,7 @@ struct HistoryRowView: View {
                     .font(.title2)
                     .symbolRenderingMode(.multicolor)
                     .frame(width: 36)
+                    .shadow(color: .black, radius: 1, x: 3, y: 3)
             }
 
             VStack(alignment: .leading, spacing: 3) {

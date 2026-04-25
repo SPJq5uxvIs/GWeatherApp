@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "BF8E8B42-6296-4547-9830-ADBB48A3B5B5",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:GWeatherApp.xcodeproj",
+      "identifier" : "AB6A0EB02F9C6F210066993A",
+      "name" : "GWeatherApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:GWeatherApp.xcodeproj",
+        "identifier" : "AB6A0EBF2F9C6F220066993A",
+        "name" : "GWeatherAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

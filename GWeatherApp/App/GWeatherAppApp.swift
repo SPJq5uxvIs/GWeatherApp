@@ -11,11 +11,18 @@ import SwiftData
 @main
 struct GWeatherAppApp: App {
     
-    @StateObject var weatherVM = WeatherViewModel()
+
+    @StateObject private var authVM    = AuthViewModel()
+    @StateObject private var weatherVM = WeatherViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView(weatherVM: weatherVM)
-                .modelContainer(for: WeatherRecord.self)
+            if authVM.isLoggedIn {
+                ContentView(weatherVM: weatherVM, authVM: authVM)
+                    .modelContainer(for: WeatherRecord.self)
+            } else {
+                LoginView(viewModel: authVM)
+            }
         }
     }
 }
