@@ -9,7 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
+        TabView {
+            CurrentWeatherView(viewModel: WeatherViewModel())
+                .tabItem {
+                    Label("Now", systemImage: "cloud.sun.fill")
+                }
+            
+            HistoryListView()
+                .tabItem {
+                    Label("History", systemImage: "clock.arrow.circlepath")
+                }
+        }
     }
 }
 
